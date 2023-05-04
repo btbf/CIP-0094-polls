@@ -35,7 +35,7 @@ git checkout ${targetTag}
 echo ""
 echo "バックアップ cabal.project.local to cabal.project.local.bkp_${targetTag} ..."
 read -p "[Enter] を押して続けます ..."
-mv cabal.project.local cabal.project.local.bkp_${targetTag}
+#mv cabal.project.local cabal.project.local.bkp_${targetTag}
 
 echo ""
 echo "${targetTag} をベースにCabalを準備します" 
@@ -70,7 +70,7 @@ cabal install \
 echo ""
 echo "以前のcabal.project.localファイルを復元します ..."
 read -p "[Enter] を押して続けます ..."
-mv cabal.project.local.bkp_${targetTag} cabal.project.local
+#mv cabal.project.local.bkp_${targetTag} cabal.project.local
 cd -
 
 echo ""
