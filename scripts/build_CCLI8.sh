@@ -3,44 +3,52 @@
 ################# custom settings #######################
 
 # set your prefered path to your v8.x.x cardano-cli binary
-repoPath="${HOME}/git/cardano-node"
+repoPath="${HOME}/git/cardanosolutions"
+binaryDestinationPath="${HOME}/.local/bin/CIP-0094"
+
+repoURL="https://github.com/CardanoSolutions/cardano-node.git"
 
 targetTag="8.0.0-untested"
 
 ################# initial checks ########################
 
-if [ -d ${repoPath} ]; then
-    echo ""
-    echo "Local repository check: OK"
-    echo "(assuming you git clone'd https://github.com/input-output-hk/cardano-node.git into it)"
-else
-    echo "please set the path to your local cardano-node repository first and restart this script"
-    exit
-fi
+#if [ -d ${repoPath} ]; then
+#    echo ""
+#    echo "Local repository check: OK"
+#    echo "(assuming you git clone'd https://github.com/input-output-hk/cardano-node.git into it)"
+#else
+#    echo "please set the path to your local cardano-node repository first and restart this script"
+#    exit
+#fi
 
-echo ""
-echo "Let's checkout ${targetTag} tag ..."
-read -p "Press [Enter] to continue ..."
+mkdir -p ${binaryDestinationPath}
+mkdir -p ${repoPath}
 cd ${repoPath}
+
+echo "リポジトリ ${repoURL} をダウンロードします"
+echo "${targetTag} タグを使用します"
+read -p "[Enter] を押して続けます ..."
+git clone ${repoURL} cardano-node-poll
+cd cardano-node-poll
 git fetch --all --tags
 git checkout ${targetTag}
 
 echo ""
-echo "backup an existing cabal.project.local to cabal.project.local.bkp_${targetTag} ..."
-read -p "Press [Enter] to continue ..."
+echo "バックアップ cabal.project.local to cabal.project.local.bkp_${targetTag} ..."
+read -p "[Enter] を押して続けます ..."
 mv cabal.project.local cabal.project.local.bkp_${targetTag}
 
 echo ""
-echo "prepare cabal to build ${targetTag} codebase ..." 
-read -p "Press [Enter] to continue ..."
+echo "${targetTag} をベースにCabalを準備します" 
+read -p "[Enter] を押して続けます ..."
 cabal update
 cabal configure -O0 -w ghc-8.10.7
 echo "package cardano-crypto-praos" >> cabal.project.local
 echo " flags: -external-libsodium-vrf" >> cabal.project.local
 
 echo ""
-echo "Now let's build and install cardano-cli ..." 
-read -p "Press [Enter] to continue ..."
+echo "cardano-cliをビルド・インストールします" 
+read -p "[Enter] を押して続けます ..."
 cabal install \
   --installdir ${HOME}/.local/bin/CIP-0094 \
   --install-method=copy \
@@ -54,26 +62,30 @@ cabal install \
 #    act_bin_path=$(echo "$line" | awk '{print $2}')
 #    act_bin=$(echo "$act_bin_path" | awk -F "/" '{print $NF}')
 #    echo "move new built to .local/bin/cardano-cli-cip0094 (not overwriting existing cardano-cli)"
-#    read -p "Press [Enter] to continue ..."
+#    read -p "[Enter] を押して続けます ..."
 #    cp -f "$act_bin_path" "${HOME}/.local/bin/${act_bin}-cip0094"
 #	ccli8Found=true
 #done
 #[[ "$ccli8Found" = false ]] && echo "Warn: cabal seems not having built cardano-cli";
 
 echo ""
-echo "restore the previous cabal.project.local file ..."
-read -p "Press [Enter] to continue ..."
+echo "以前のcabal.project.localファイルを復元します ..."
+read -p "[Enter] を押して続けます ..."
 mv cabal.project.local.bkp_${targetTag} cabal.project.local
 cd -
 
 echo ""
-echo "Now we should have a new cardano-cli based on the ${targetTag} codebase"
+echo "${targetTag} コードベースの新しいcardano-cliがインストールされました"
 echo "${HOME}/.local/bin/CIP-0094/cardano-cli --version"
 ${HOME}/.local/bin/CIP-0094/cardano-cli --version
 
 echo ""
-echo "It's time to download getPoll.sh (helper script to participate to polls)"
-read -p "Press [Enter] to continue ..."
+echo "投票に参加するための getPoll.sh をダウンロードします"
+read -p "[Enter] を押して続けます ..."
+cd ${repoPath}
 curl -s -o getPoll.sh "https://raw.githubusercontent.com/cardano-foundation/CIP-0049-polls/main/scripts/getPoll.sh"
 chmod 755 getPoll.sh
-echo "ready to run ./getPoll.sh"
+echo "getPoll.sh を実行しますか？"
+read -p "[Enter] を押して続けます ..."
+
+./getPoll.sh
