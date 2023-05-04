@@ -3,7 +3,7 @@
 ################# custom settings #######################
 
 # set your prefered path to your v8.x.x cardano-cli binary
-repoPath="${HOME}/git/cardanosolutions"
+repoPath="${HOME}/git/spo-poll"
 binaryDestinationPath="${HOME}/.local/bin/CIP-0094"
 
 repoURL="https://github.com/CardanoSolutions/cardano-node.git"
@@ -22,7 +22,6 @@ targetTag="8.0.0-untested"
 #fi
 
 mkdir -p ${binaryDestinationPath}
-mkdir -p ${repoPath}
 cd ${repoPath}
 
 echo "リポジトリ ${repoURL} をダウンロードします"
