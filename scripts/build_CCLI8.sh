@@ -6,7 +6,7 @@
 repoPath="${HOME}/git/spo-poll"
 binaryDestinationPath="${HOME}/.local/bin/CIP-0094"
 
-repoURL="https://github.com/CardanoSolutions/cardano-node.git"
+repoURL="https://github.com/input-output-hk/cardano-node.git"
 
 targetTag="8.0.0-untested"
 
