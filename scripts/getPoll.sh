@@ -107,9 +107,10 @@ if [[ -n $(echo $txMeta | jq -r '.["94"]') ]]; then
     txCBOR=$(curl -s GET "https://raw.githubusercontent.com/gufmar/CIP-0049-polls/main/networks/preprod/${txHash}/poll-CBOR.json")
     echo "$txCBOR" > ${HOME}/git/spo-poll/CIP-0094_${txHash}-CBOR.json
 	echo ""
-    ${CCLI8} governance answer-poll --poll-file ${HOME}/git/spo-poll/CIP-0094_${txHash}-CBOR.json 1> ${HOME}/git/spo-poll/CIP-0094_${txHash}-poll-answer.json
+    answer_file="CIP-0094_${txHash}-poll-answer.json"
+    ${CCLI8} governance answer-poll --poll-file ${HOME}/git/spo-poll/CIP-0094_${txHash}-CBOR.json 1> ${HOME}/git/spo-poll/${answer_file}
 	echo ""
-    echo "Metadata for your answer TX is ready in ${HOME}/git/spo-poll/CIP-0094_${txHash}-poll-answer.json"
+    echo "Metadata for your answer TX is ready in ${HOME}/git/spo-poll/${answer_file}"
 else
     echo "Warn: TX has no CIP-0094 metadata label. Exiting"
 fi
