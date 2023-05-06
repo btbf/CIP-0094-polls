@@ -82,7 +82,7 @@ echo ""
 echo "投票に参加するための getPoll.sh をダウンロードします"
 read -p "[Enter] を押して続けます ..."
 cd ${repoPath}
-curl -s -o getPoll.sh "https://raw.githubusercontent.com/cardano-foundation/CIP-0049-polls/main/scripts/getPoll.sh"
+curl -s -o getPoll.sh "https://raw.githubusercontent.com/btbf/CIP-0094-polls/main/scripts/getPoll.sh"
 chmod 755 getPoll.sh
 echo "getPoll.sh を実行しますか？"
 read -p "[Enter] を押して続けます ..."
